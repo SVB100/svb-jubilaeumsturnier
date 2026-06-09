@@ -313,12 +313,85 @@ async function loadKO() {
     try {
 
         const response = await fetch(KO_CSV);
-        const text = await response.text();
+        const csv = await response.text();
 
-        document.getElementById("koRound").innerHTML =
-            "<pre style='white-space:pre-wrap'>" +
-            text.substring(0, 800) +
-            "</pre>";
+        const rows = csv
+            .split("\n")
+            .map(r => r.split(","));
+
+        let html = "";
+
+        let currentRound = "";
+
+        rows.forEach(row => {
+
+            const round = row[0]?.trim();
+            const time = row[3]?.trim();
+            const gate = row[4]?.trim();
+            const team1 = row[5]?.trim();
+            const team2 = row[6]?.trim();
+
+            if (
+                !round ||
+                !team1 ||
+                !team2 ||
+                round === "Runde"
+            ) {
+                return;
+            }
+
+            if (round !== currentRound) {
+
+                currentRound = round;
+
+                html += `
+                    <h2 style="
+                        color:#ffd700;
+                        margin-top:20px;
+                        margin-bottom:15px;
+                    ">
+                        🏆 ${round}
+                    </h2>
+                `;
+            }
+
+            html += `
+                <div style="
+                    border:1px solid rgba(255,255,255,0.2);
+                    border-radius:8px;
+                    padding:10px;
+                    margin-bottom:10px;
+                    background:rgba(255,255,255,0.03);
+                ">
+
+                    <div style="
+                        color:#ffd700;
+                        font-weight:bold;
+                        margin-bottom:5px;
+                    ">
+                        ${time} • TOR ${gate}
+                    </div>
+
+                    <div style="font-size:18px;">
+                        ${team1}
+                    </div>
+
+                    <div style="
+                        color:#ffd700;
+                        margin:4px 0;
+                    ">
+                        VS
+                    </div>
+
+                    <div style="font-size:18px;">
+                        ${team2}
+                    </div>
+
+                </div>
+            `;
+        });
+
+        document.getElementById("koRound").innerHTML = html;
 
     } catch (err) {
 
