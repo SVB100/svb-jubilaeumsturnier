@@ -7,6 +7,15 @@ const TABLES_CSV =
 const KO_CSV =
 "https://docs.google.com/spreadsheets/d/e/2PACX-1vQrzWNiUjfIIyZAv9FzuXUf5MMZnwKMqN3FdGixf5Li5wSaUIA5NU-0pXMGNi2TKg/pub?gid=1216619965&single=true&output=csv";
 
+let currentGroup = 0;
+
+const GROUP_NAMES = [
+    "Gruppe A",
+    "Gruppe B",
+    "Gruppe C",
+    "Gruppe D"
+];
+
 function updateClock() {
     document.getElementById("clock").innerHTML =
         new Date().toLocaleTimeString("de-DE");
@@ -20,14 +29,7 @@ function parseCSV(text) {
         .split("\n")
         .map(row => row.split(","));
 }
-let currentGroup = 0;
 
-const GROUP_NAMES = [
-    "Gruppe A",
-    "Gruppe B",
-    "Gruppe C",
-    "Gruppe D"
-];
 async function loadGroups() {
 
     try {
@@ -54,18 +56,18 @@ async function loadGroups() {
             if (result.trim() !== "") {
 
                 played.push({
-                    group,
                     team1,
                     team2,
-                    result
+                    result,
+                    group
                 });
 
             } else {
 
                 upcoming.push({
-                    group,
                     team1,
                     team2,
+                    group,
                     time,
                     gate
                 });
@@ -74,6 +76,7 @@ async function loadGroups() {
 
         showResults(played);
         showUpcoming(upcoming);
+        showCurrentMatch(upcoming);
 
     } catch (err) {
 
@@ -81,6 +84,9 @@ async function loadGroups() {
             "Fehler beim Laden";
 
         document.getElementById("nextMatches").innerHTML =
+            "Fehler beim Laden";
+
+        document.getElementById("currentMatch").innerHTML =
             "Fehler beim Laden";
     }
 }
@@ -107,9 +113,7 @@ function showResults(matches) {
 
 function showUpcoming(matches) {
 
-    showCurrentMatch(matches);
-
-    const nextMatches = matches.slice(0,10);
+    const nextMatches = matches.slice(0, 10);
 
     let html = "";
 
@@ -117,9 +121,7 @@ function showUpcoming(matches) {
 
         html += `
             <div style="margin-bottom:8px;">
-                ${match.team1}
-                vs
-                ${match.team2}
+                ${match.team1} vs ${match.team2}
             </div>
         `;
     });
@@ -129,7 +131,7 @@ function showUpcoming(matches) {
 
 function showCurrentMatch(matches) {
 
-    if(matches.length === 0) {
+    if (matches.length === 0) {
 
         document.getElementById("currentMatch").innerHTML =
             "Keine Spiele mehr offen";
@@ -144,8 +146,9 @@ function showCurrentMatch(matches) {
 
             <div style="
                 color:#ffd700;
-                font-size:18px;
+                font-size:20px;
                 margin-bottom:20px;
+                font-weight:bold;
             ">
                 TOR ${match.gate}
             </div>
@@ -190,7 +193,6 @@ async function loadTables() {
     try {
 
         const response = await fetch(TABLES_CSV);
-
         const csv = await response.text();
 
         showTable(csv);
@@ -200,45 +202,31 @@ async function loadTables() {
         document.getElementById("liveTable").innerHTML =
             "Tabelle konnte nicht geladen werden";
     }
-async function loadTables() {
+}
 
-    try {
-
-        const response = await fetch(TABLES_CSV);
-
-        const csv = await response.text();
-
-        showTable(csv);
-
-    } catch (err) {
-
-        document.getElementById("liveTable").innerHTML =
-            "Tabelle konnte nicht geladen werden";
-    }
-}function showTable(csv) {
+function showTable(csv) {
 
     const groupName = GROUP_NAMES[currentGroup];
 
     const start = csv.indexOf(groupName);
 
-    if(start === -1) return;
+    if (start === -1) return;
 
     let end = csv.length;
 
-for (const name of GROUP_NAMES) {
+    for (const name of GROUP_NAMES) {
 
-    if (name === groupName) continue;
+        if (name === groupName) continue;
 
-    const pos = csv.indexOf(name, start + 1);
+        const pos = csv.indexOf(name, start + 1);
 
-    if (pos > start && pos < end) {
-        end = pos;
+        if (pos > start && pos < end) {
+            end = pos;
+        }
     }
-}
 
-const section = csv.substring(start, end);
-
-const rows = section.split("\n");
+    const section = csv.substring(start, end);
+    const rows = section.split("\n");
 
     let html = `
         <h2 style="color:#ffd700;margin-bottom:15px;">
@@ -246,79 +234,78 @@ const rows = section.split("\n");
         </h2>
 
         <table>
-    <tr>
-        <th>#</th>
-        <th>Team</th>
-        <th>Pkt</th>
-        <th>Diff</th>
-    </tr>
+            <tr>
+                <th>#</th>
+                <th>Team</th>
+                <th>Pkt</th>
+                <th>Diff</th>
+            </tr>
     `;
 
     const teams = [];
 
-for(let i = 2; i < rows.length; i++) {
+    for (let i = 2; i < rows.length; i++) {
 
-    const cols = rows[i].split(",");
+        const cols = rows[i].split(",");
 
-    const team = cols[1];
+        const team = cols[1];
 
-    if(!team) continue;
-    if(team.trim() === "") continue;
-    if(team === "Team") continue;
+        if (!team) continue;
+        if (team.trim() === "") continue;
+        if (team === "Team") continue;
 
-    teams.push({
-        team: team,
-        points: Number(cols[9] || 0),
-        diff: Number(cols[8] || 0),
-        goals: Number(cols[6] || 0)
-    });
-}
-
-teams.sort((a,b) => {
-
-    if(b.points !== a.points)
-        return b.points - a.points;
-
-    if(b.diff !== a.diff)
-        return b.diff - a.diff;
-
-    return b.goals - a.goals;
-});
-
-teams.forEach((t,index) => {
-
-    let diffText = t.diff;
-
-    if(t.diff > 0) {
-        diffText = "+" + t.diff;
+        teams.push({
+            team: team,
+            points: Number(cols[9] || 0),
+            diff: Number(cols[8] || 0),
+            goals: Number(cols[6] || 0)
+        });
     }
 
-    html += `
-        <tr>
-            <td>${index + 1}</td>
-            <td>${t.team}</td>
-            <td>${t.points}</td>
-            <td>${diffText}</td>
-        </tr>
-    `;
-});
+    teams.sort((a, b) => {
+
+        if (b.points !== a.points)
+            return b.points - a.points;
+
+        if (b.diff !== a.diff)
+            return b.diff - a.diff;
+
+        return b.goals - a.goals;
+    });
+
+    teams.forEach((t, index) => {
+
+        let diffText = t.diff;
+
+        if (t.diff > 0) {
+            diffText = "+" + t.diff;
+        }
+
+        html += `
+            <tr>
+                <td>${index + 1}</td>
+                <td>${t.team}</td>
+                <td>${t.points}</td>
+                <td>${diffText}</td>
+            </tr>
+        `;
+    });
 
     html += "</table>";
 
-    document.getElementById("liveTable").innerHTML =
-        html;
+    document.getElementById("liveTable").innerHTML = html;
 }
+
 async function loadKO() {
 
     try {
 
         const response = await fetch(KO_CSV);
-
         const text = await response.text();
 
         document.getElementById("koRound").innerHTML =
             "<pre style='white-space:pre-wrap'>" +
-            text.substring(0,800) +
+            text.substring(0, 800) +
             "</pre>";
 
     } catch (err) {
@@ -329,19 +316,17 @@ async function loadKO() {
 }
 
 loadGroups();
-loadKO();
 loadTables();
+loadKO();
 
 setInterval(() => {
 
     currentGroup++;
 
-    if(currentGroup >= GROUP_NAMES.length) {
+    if (currentGroup >= GROUP_NAMES.length) {
         currentGroup = 0;
     }
 
-    loadGroups();
-    loadKO();
     loadTables();
 
 }, 15000);
