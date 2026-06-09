@@ -26,6 +26,7 @@ updateClock();
 
 function parseCSV(text) {
     return text
+        .trim()
         .split("\n")
         .map(row => row.split(","));
 }
@@ -44,12 +45,12 @@ async function loadGroups() {
 
         rows.slice(1).forEach(row => {
 
+            const slot = row[1] || "";
+            const gate = row[3] || "";
+            const group = row[4] || "";
             const team1 = row[7] || "";
             const team2 = row[8] || "";
             const result = row[9] || "";
-            const time = row[2] || "";
-            const group = row[4] || "";
-            const gate = row[3] || "";
 
             if (!team1 || !team2) return;
 
@@ -65,20 +66,22 @@ async function loadGroups() {
             } else {
 
                 upcoming.push({
-                    team1,
-                    team2,
+                    slot,
+                    gate,
                     group,
-                    time,
-                    gate
+                    team1,
+                    team2
                 });
             }
         });
 
         showResults(played);
         showUpcoming(upcoming);
-        showCurrentMatch(upcoming);
+        showCurrentSlot(upcoming);
 
     } catch (err) {
+
+        console.error(err);
 
         document.getElementById("results").innerHTML =
             "Fehler beim Laden";
@@ -129,7 +132,7 @@ function showUpcoming(matches) {
     document.getElementById("nextMatches").innerHTML = html;
 }
 
-function showCurrentMatch(matches) {
+function showCurrentSlot(matches) {
 
     if (matches.length === 0) {
 
@@ -139,53 +142,76 @@ function showCurrentMatch(matches) {
         return;
     }
 
-    const match = matches[0];
+    const slotNumber = matches[0].slot;
 
-    document.getElementById("currentMatch").innerHTML = `
-        <div style="text-align:center;padding-top:20px;">
+    const slotMatches = matches.filter(match =>
+        match.slot === slotNumber
+    );
 
-            <div style="
-                color:#ffd700;
-                font-size:20px;
-                margin-bottom:20px;
-                font-weight:bold;
-            ">
-                TOR ${match.gate}
-            </div>
-
-            <div style="
-                font-size:34px;
-                font-weight:bold;
-                margin-bottom:15px;
-            ">
-                ${match.team1}
-            </div>
-
-            <div style="
-                font-size:24px;
-                color:#ffd700;
-                margin-bottom:15px;
-            ">
-                VS
-            </div>
-
-            <div style="
-                font-size:34px;
-                font-weight:bold;
-                margin-bottom:20px;
-            ">
-                ${match.team2}
-            </div>
-
-            <div style="
-                font-size:20px;
-                color:#cccccc;
-            ">
-                ${match.group}
-            </div>
-
+    let html = `
+        <div style="
+            text-align:center;
+            color:#ffd700;
+            font-size:24px;
+            font-weight:bold;
+            margin-bottom:20px;
+        ">
+            AKTUELLER SLOT ${slotNumber}
         </div>
     `;
+
+    slotMatches.forEach(match => {
+
+        html += `
+            <div style="
+                margin-bottom:20px;
+                padding-bottom:15px;
+                border-bottom:1px solid rgba(255,255,255,0.2);
+            ">
+
+                <div style="
+                    color:#ffd700;
+                    font-size:18px;
+                    font-weight:bold;
+                    margin-bottom:8px;
+                ">
+                    TOR ${match.gate}
+                </div>
+
+                <div style="
+                    font-size:24px;
+                    font-weight:bold;
+                ">
+                    ${match.team1}
+                </div>
+
+                <div style="
+                    color:#ffd700;
+                    margin:6px 0;
+                    font-size:18px;
+                ">
+                    VS
+                </div>
+
+                <div style="
+                    font-size:24px;
+                    font-weight:bold;
+                ">
+                    ${match.team2}
+                </div>
+
+                <div style="
+                    color:#cccccc;
+                    margin-top:6px;
+                ">
+                    ${match.group}
+                </div>
+
+            </div>
+        `;
+    });
+
+    document.getElementById("currentMatch").innerHTML = html;
 }
 
 async function loadTables() {
@@ -255,7 +281,7 @@ function showTable(csv) {
         if (team === "Team") continue;
 
         teams.push({
-            team: team,
+            team,
             points: Number(cols[9] || 0),
             diff: Number(cols[8] || 0),
             goals: Number(cols[6] || 0)
@@ -275,18 +301,15 @@ function showTable(csv) {
 
     teams.forEach((t, index) => {
 
-        let diffText = t.diff;
-
-        if (t.diff > 0) {
-            diffText = "+" + t.diff;
-        }
+        const diff =
+            t.diff > 0 ? "+" + t.diff : t.diff;
 
         html += `
             <tr>
                 <td>${index + 1}</td>
                 <td>${t.team}</td>
                 <td>${t.points}</td>
-                <td>${diffText}</td>
+                <td>${diff}</td>
             </tr>
         `;
     });
@@ -327,6 +350,8 @@ setInterval(() => {
         currentGroup = 0;
     }
 
+    loadGroups();
     loadTables();
+    loadKO();
 
 }, 15000);
