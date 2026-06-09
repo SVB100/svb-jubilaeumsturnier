@@ -152,7 +152,7 @@ function showCurrentMatch(matches) {
                 font-size:18px;
                 margin-bottom:20px;
             ">
-                JETZT AUF TOR 1
+                JETZT AUF TOR ${match.gate}
             </div>
 
             <div style="
