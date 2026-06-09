@@ -107,6 +107,8 @@ function showResults(matches) {
 
 function showUpcoming(matches) {
 
+    showCurrentMatch(matches);
+
     const nextMatches = matches.slice(0,10);
 
     let html = "";
@@ -182,6 +184,7 @@ function showCurrentMatch(matches) {
         </div>
     `;
 }
+
 function showTable(csv) {
 
     const groupName = GROUP_NAMES[currentGroup];
