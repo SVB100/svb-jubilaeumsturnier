@@ -47,6 +47,7 @@ async function loadGroups() {
             const result = row[9] || "";
             const time = row[2] || "";
             const group = row[4] || "";
+            const gate = row[3] || "";
 
             if (!team1 || !team2) return;
 
