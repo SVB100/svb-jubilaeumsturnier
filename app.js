@@ -131,7 +131,7 @@ function showUpcoming(matches) {
 
 function showCurrentMatch(matches) {
 
-    if(matches.length === 0) {
+    if (matches.length === 0) {
 
         document.getElementById("currentMatch").innerHTML =
             "Keine Spiele mehr offen";
@@ -186,6 +186,22 @@ function showCurrentMatch(matches) {
 
         </div>
     `;
+}
+
+async function loadTables() {
+
+    try {
+
+        const response = await fetch(TABLES_CSV);
+        const csv = await response.text();
+
+        showTable(csv);
+
+    } catch (err) {
+
+        document.getElementById("liveTable").innerHTML =
+            "Tabelle konnte nicht geladen werden";
+    }
 }
 
 function showTable(csv) {
