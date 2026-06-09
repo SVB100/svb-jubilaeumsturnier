@@ -212,11 +212,18 @@ teams.sort((a,b) => {
 
 teams.forEach((t,index) => {
 
+    let diffText = t.diff;
+
+    if(t.diff > 0) {
+        diffText = "+" + t.diff;
+    }
+
     html += `
         <tr>
             <td>${index + 1}</td>
             <td>${t.team}</td>
             <td>${t.points}</td>
+            <td>${diffText}</td>
         </tr>
     `;
 });
