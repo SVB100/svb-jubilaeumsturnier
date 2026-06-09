@@ -185,7 +185,22 @@ function showCurrentMatch(matches) {
     `;
 }
 
-function showTable(csv) {
+async function loadTables() {
+
+    try {
+
+        const response = await fetch(TABLES_CSV);
+
+        const csv = await response.text();
+
+        showTable(csv);
+
+    } catch (err) {
+
+        document.getElementById("liveTable").innerHTML =
+            "Tabelle konnte nicht geladen werden";
+    }
+}function showTable(csv) {
 
     const groupName = GROUP_NAMES[currentGroup];
 
