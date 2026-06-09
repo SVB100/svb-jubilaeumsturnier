@@ -107,17 +107,14 @@ function showResults(matches) {
 
 function showUpcoming(matches) {
 
-    showCurrentMatch(matches);
-
     const nextMatches = matches.slice(0,10);
-    
-   let html = "";
+
+    let html = "";
 
     nextMatches.forEach(match => {
 
         html += `
             <div style="margin-bottom:8px;">
-                ${match.time} |
                 ${match.team1}
                 vs
                 ${match.team2}
@@ -127,6 +124,7 @@ function showUpcoming(matches) {
 
     document.getElementById("nextMatches").innerHTML = html;
 }
+
 function showCurrentMatch(matches) {
 
     console.log(matches[0]);
