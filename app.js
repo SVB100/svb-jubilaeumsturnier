@@ -139,69 +139,76 @@ function showCurrentMatch(matches) {
         return;
     }
 
-    const match = matches[0];
+    const firstTime = (matches[0].time || "").trim();
 
-    document.getElementById("currentMatch").innerHTML = `
-        <div style="text-align:center;padding-top:20px;">
+    const currentSlot = matches.filter(match =>
+        (match.time || "").trim() === firstTime
+    );
 
-            <div style="
-                color:#ffd700;
-                font-size:20px;
-                margin-bottom:20px;
-                font-weight:bold;
-            ">
-                TOR ${match.gate}
-            </div>
-
-            <div style="
-                font-size:34px;
-                font-weight:bold;
-                margin-bottom:15px;
-            ">
-                ${match.team1}
-            </div>
-
-            <div style="
-                font-size:24px;
-                color:#ffd700;
-                margin-bottom:15px;
-            ">
-                VS
-            </div>
-
-            <div style="
-                font-size:34px;
-                font-weight:bold;
-                margin-bottom:20px;
-            ">
-                ${match.team2}
-            </div>
-
-            <div style="
-                font-size:20px;
-                color:#cccccc;
-            ">
-                ${match.group}
-            </div>
-
+    let html = `
+        <div style="
+            text-align:center;
+            color:#ffd700;
+            font-size:24px;
+            font-weight:bold;
+            margin-bottom:20px;
+        ">
+            Aktueller Slot ${firstTime}
         </div>
     `;
-}
 
-async function loadTables() {
+    currentSlot.forEach(match => {
 
-    try {
+        html += `
+            <div style="
+                margin-bottom:20px;
+                padding-bottom:15px;
+                border-bottom:1px solid rgba(255,255,255,0.2);
+            ">
 
-        const response = await fetch(TABLES_CSV);
-        const csv = await response.text();
+                <div style="
+                    color:#ffd700;
+                    font-size:18px;
+                    font-weight:bold;
+                    margin-bottom:8px;
+                ">
+                    TOR ${match.gate}
+                </div>
 
-        showTable(csv);
+                <div style="
+                    font-size:22px;
+                    font-weight:bold;
+                ">
+                    ${match.team1}
+                </div>
 
-    } catch (err) {
+                <div style="
+                    color:#ffd700;
+                    margin:6px 0;
+                    font-size:18px;
+                ">
+                    VS
+                </div>
 
-        document.getElementById("liveTable").innerHTML =
-            "Tabelle konnte nicht geladen werden";
-    }
+                <div style="
+                    font-size:22px;
+                    font-weight:bold;
+                ">
+                    ${match.team2}
+                </div>
+
+                <div style="
+                    color:#cccccc;
+                    margin-top:8px;
+                ">
+                    ${match.group}
+                </div>
+
+            </div>
+        `;
+    });
+
+    document.getElementById("currentMatch").innerHTML = html;
 }
 
 function showTable(csv) {
