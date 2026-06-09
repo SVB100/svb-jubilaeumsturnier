@@ -126,11 +126,11 @@ function showUpcoming(matches) {
 
     const currentSlot = String(matches[0].slot).trim();
 
-    const nextSlotMatch = matches.find(match =>
+    const nextMatch = matches.find(match =>
         String(match.slot).trim() !== currentSlot
     );
 
-    if (!nextSlotMatch) {
+    if (!nextMatch) {
 
         document.getElementById("nextMatches").innerHTML =
             "Keine weiteren Slots";
@@ -138,7 +138,7 @@ function showUpcoming(matches) {
         return;
     }
 
-    const nextSlot = String(nextSlotMatch.slot).trim();
+    const nextSlot = String(nextMatch.slot).trim();
 
     const slotMatches = matches.filter(match =>
         String(match.slot).trim() === nextSlot
@@ -174,7 +174,7 @@ function showUpcoming(matches) {
                 </div>
 
                 <div style="
-                    font-size:20px;
+                    font-size:22px;
                     font-weight:bold;
                 ">
                     ${match.team1}
@@ -188,10 +188,17 @@ function showUpcoming(matches) {
                 </div>
 
                 <div style="
-                    font-size:20px;
+                    font-size:22px;
                     font-weight:bold;
                 ">
                     ${match.team2}
+                </div>
+
+                <div style="
+                    color:#cccccc;
+                    margin-top:4px;
+                ">
+                    ${match.group}
                 </div>
 
             </div>
