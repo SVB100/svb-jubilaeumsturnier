@@ -71,7 +71,6 @@ async function loadGroups() {
                     time,
                     gate
                 });
-                console.log(time, gate, team1, team2);
             }
         });
 
