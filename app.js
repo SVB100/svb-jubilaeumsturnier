@@ -148,10 +148,22 @@ function showTable(csv) {
 
     if(start === -1) return;
 
-    const section =
-        csv.substring(start, start + 3000);
+    clet end = csv.length;
 
-    const rows = section.split("\n");
+for (const name of GROUP_NAMES) {
+
+    if (name === groupName) continue;
+
+    const pos = csv.indexOf(name, start + 1);
+
+    if (pos > start && pos < end) {
+        end = pos;
+    }
+}
+
+const section = csv.substring(start, end);
+
+const rows = section.split("\n");
 
     let html = `
         <h2 style="color:#ffd700;margin-bottom:15px;">
