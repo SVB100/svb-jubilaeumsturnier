@@ -316,27 +316,31 @@ async function loadKO() {
         const csv = await response.text();
 
         const rows = csv
+            .trim()
             .split("\n")
-            .map(r => r.split(","));
+            .map(row => row.split(","));
 
         let html = "";
-
         let currentRound = "";
 
         rows.forEach(row => {
 
-            const round = row[0]?.trim();
-            const time = row[3]?.trim();
-            const gate = row[4]?.trim();
-            const team1 = row[5]?.trim();
-            const team2 = row[6]?.trim();
+            const round = (row[0] || "").trim();
+            const time = (row[3] || "").trim();
+            const gate = (row[4] || "").trim();
+            const team1 = (row[5] || "").trim();
+            const team2 = (row[6] || "").trim();
 
             if (
                 !round ||
-                !team1 ||
-                !team2 ||
-                round === "Runde"
+                round === "Runde" ||
+                round === "Gruppe" ||
+                round.includes("qualifizierte")
             ) {
+                return;
+            }
+
+            if (!team1 || !team2) {
                 return;
             }
 
@@ -345,45 +349,54 @@ async function loadKO() {
                 currentRound = round;
 
                 html += `
-                    <h2 style="
+                    <div style="
                         color:#ffd700;
+                        font-size:24px;
+                        font-weight:bold;
                         margin-top:20px;
                         margin-bottom:15px;
                     ">
                         🏆 ${round}
-                    </h2>
+                    </div>
                 `;
             }
 
             html += `
                 <div style="
-                    border:1px solid rgba(255,255,255,0.2);
+                    border:1px solid rgba(255,255,255,0.25);
                     border-radius:8px;
-                    padding:10px;
+                    padding:12px;
                     margin-bottom:10px;
-                    background:rgba(255,255,255,0.03);
+                    background:rgba(255,255,255,0.04);
                 ">
 
                     <div style="
                         color:#ffd700;
+                        font-size:14px;
                         font-weight:bold;
-                        margin-bottom:5px;
+                        margin-bottom:8px;
                     ">
                         ${time} • TOR ${gate}
                     </div>
 
-                    <div style="font-size:18px;">
+                    <div style="
+                        font-size:18px;
+                        font-weight:bold;
+                    ">
                         ${team1}
                     </div>
 
                     <div style="
                         color:#ffd700;
-                        margin:4px 0;
+                        margin:5px 0;
                     ">
                         VS
                     </div>
 
-                    <div style="font-size:18px;">
+                    <div style="
+                        font-size:18px;
+                        font-weight:bold;
+                    ">
                         ${team2}
                     </div>
 
@@ -394,6 +407,8 @@ async function loadKO() {
         document.getElementById("koRound").innerHTML = html;
 
     } catch (err) {
+
+        console.error(err);
 
         document.getElementById("koRound").innerHTML =
             "KO-Daten konnten nicht geladen werden";
