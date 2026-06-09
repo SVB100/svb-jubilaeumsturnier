@@ -148,7 +148,7 @@ function showTable(csv) {
 
     if(start === -1) return;
 
-    clet end = csv.length;
+    let end = csv.length;
 
 for (const name of GROUP_NAMES) {
 
