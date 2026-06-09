@@ -242,8 +242,7 @@ function showUpcoming(matches) {
         ">
             NÄCHSTER SLOT ${nextSlot}
         </div>
-    `;
-        slotMatches.forEach(match => {
+    `;slotMatches.forEach(match => {
 
         html += `
             <div style="
