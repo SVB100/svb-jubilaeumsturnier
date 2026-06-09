@@ -106,10 +106,10 @@ function showResults(matches) {
 function showUpcoming(matches) {
 
     showCurrentMatch(matches);
-    
-    const nextMatches = matches.slice(0,10);
 
-    let html = "";
+    const nextMatches = matches.slice(0,10);
+    
+   let html = "";
 
     nextMatches.forEach(match => {
 
