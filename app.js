@@ -127,8 +127,6 @@ function showUpcoming(matches) {
 
 function showCurrentMatch(matches) {
 
-    console.log(matches[0]);
-    
     if(matches.length === 0) {
 
         document.getElementById("currentMatch").innerHTML =
@@ -139,88 +137,51 @@ function showCurrentMatch(matches) {
 
     const match = matches[0];
 
-    let html = `
-    <div style="
-        text-align:center;
-        margin-bottom:20px;
-        color:#ffd700;
-        font-size:22px;
-        font-weight:bold;
-    ">
-        Aktueller Slot ${firstTime}
-    </div>
-`;
-
-currentSlot.forEach(match => {
-
-    html += `
-        <div style="
-            margin-bottom:25px;
-            border-bottom:1px solid rgba(255,255,255,0.2);
-            padding-bottom:15px;
-        ">
+    document.getElementById("currentMatch").innerHTML = `
+        <div style="text-align:center;padding-top:20px;">
 
             <div style="
                 color:#ffd700;
                 font-size:18px;
-                margin-bottom:8px;
+                margin-bottom:20px;
             ">
                 TOR ${match.gate}
             </div>
 
             <div style="
-                font-size:26px;
+                font-size:34px;
                 font-weight:bold;
+                margin-bottom:15px;
             ">
                 ${match.team1}
             </div>
 
             <div style="
-                font-size:18px;
+                font-size:24px;
                 color:#ffd700;
-                margin:6px 0;
+                margin-bottom:15px;
             ">
                 VS
             </div>
 
             <div style="
-                font-size:26px;
+                font-size:34px;
                 font-weight:bold;
+                margin-bottom:20px;
             ">
                 ${match.team2}
             </div>
 
             <div style="
+                font-size:20px;
                 color:#cccccc;
-                margin-top:6px;
             ">
                 ${match.group}
             </div>
 
         </div>
     `;
-});
-
-document.getElementById("currentMatch").innerHTML = html;
 }
-
-async function loadTables() {
-
-    try {
-
-        const response = await fetch(TABLES_CSV);
-
-        const csv = await response.text();
-
-        showTable(csv);
-
-    } catch (err) {
-
-        document.getElementById("liveTable").innerHTML =
-            "Tabelle konnte nicht geladen werden";
-    }
-}
-
 function showTable(csv) {
 
     const groupName = GROUP_NAMES[currentGroup];
