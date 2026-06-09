@@ -204,26 +204,22 @@ async function loadTables() {
     }
 }
 
-function showTable(csv) {
+async function loadTables() {
 
-    const groupName = GROUP_NAMES[currentGroup];
+    try {
 
-    const start = csv.indexOf(groupName);
+        const response = await fetch(TABLES_CSV);
 
-    if (start === -1) return;
+        const csv = await response.text();
 
-    let end = csv.length;
+        showTable(csv);
 
-    for (const name of GROUP_NAMES) {
+    } catch (err) {
 
-        if (name === groupName) continue;
-
-        const pos = csv.indexOf(name, start + 1);
-
-        if (pos > start && pos < end) {
-            end = pos;
-        }
+        document.getElementById("liveTable").innerHTML =
+            "Tabelle konnte nicht geladen werden";
     }
+}
 
     const section = csv.substring(start, end);
     const rows = section.split("\n");
