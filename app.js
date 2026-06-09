@@ -10,330 +10,309 @@ const KO_CSV =
 let currentGroup = 0;
 
 const GROUP_NAMES = [
-"Gruppe A",
-"Gruppe B",
-"Gruppe C",
-"Gruppe D"
+    "Gruppe A",
+    "Gruppe B",
+    "Gruppe C",
+    "Gruppe D"
 ];
 
 function updateClock() {
-document.getElementById("clock").innerHTML =
-new Date().toLocaleTimeString("de-DE");
+    document.getElementById("clock").innerHTML =
+        new Date().toLocaleTimeString("de-DE");
 }
 
 setInterval(updateClock, 1000);
 updateClock();
 
 function parseCSV(text) {
-return text
-.split("\n")
-.map(row => row.split(","));
+    return text
+        .split("\n")
+        .map(row => row.split(","));
 }
 
 async function loadGroups() {
 
-```
-try {
+    try {
 
-    const response = await fetch(GROUPS_CSV);
-    const csv = await response.text();
+        const response = await fetch(GROUPS_CSV);
+        const csv = await response.text();
 
-    const rows = parseCSV(csv);
+        const rows = parseCSV(csv);
 
-    const played = [];
-    const upcoming = [];
+        const played = [];
+        const upcoming = [];
 
-    rows.slice(1).forEach(row => {
+        rows.slice(1).forEach(row => {
 
-        const team1 = row[7] || "";
-        const team2 = row[8] || "";
-        const result = row[9] || "";
-        const time = row[2] || "";
-        const group = row[4] || "";
-        const gate = row[3] || "";
+            const team1 = row[7] || "";
+            const team2 = row[8] || "";
+            const result = row[9] || "";
+            const time = row[2] || "";
+            const group = row[4] || "";
+            const gate = row[3] || "";
 
-        if (!team1 || !team2) return;
+            if (!team1 || !team2) return;
 
-        if (result.trim() !== "") {
+            if (result.trim() !== "") {
 
-            played.push({
-                team1,
-                team2,
-                result,
-                group
-            });
+                played.push({
+                    team1,
+                    team2,
+                    result,
+                    group
+                });
 
-        } else {
+            } else {
 
-            upcoming.push({
-                team1,
-                team2,
-                group,
-                time,
-                gate
-            });
-        }
-    });
+                upcoming.push({
+                    team1,
+                    team2,
+                    group,
+                    time,
+                    gate
+                });
+            }
+        });
 
-    showResults(played);
-    showUpcoming(upcoming);
-    showCurrentMatch(upcoming);
+        showResults(played);
+        showUpcoming(upcoming);
+        showCurrentMatch(upcoming);
 
-} catch (err) {
+    } catch (err) {
 
-    document.getElementById("results").innerHTML =
-        "Fehler beim Laden";
+        document.getElementById("results").innerHTML =
+            "Fehler beim Laden";
 
-    document.getElementById("nextMatches").innerHTML =
-        "Fehler beim Laden";
+        document.getElementById("nextMatches").innerHTML =
+            "Fehler beim Laden";
 
-    document.getElementById("currentMatch").innerHTML =
-        "Fehler beim Laden";
-}
-```
-
+        document.getElementById("currentMatch").innerHTML =
+            "Fehler beim Laden";
+    }
 }
 
 function showResults(matches) {
 
-```
-const lastMatches = matches.slice(-10).reverse();
+    const lastMatches = matches.slice(-10).reverse();
 
-let html = "";
+    let html = "";
 
-lastMatches.forEach(match => {
+    lastMatches.forEach(match => {
 
-    html += `
-        <div style="margin-bottom:8px;">
-            <strong>${match.team1}</strong>
-            ${match.result}
-            <strong>${match.team2}</strong>
-        </div>
-    `;
-});
+        html += `
+            <div style="margin-bottom:8px;">
+                <strong>${match.team1}</strong>
+                ${match.result}
+                <strong>${match.team2}</strong>
+            </div>
+        `;
+    });
 
-document.getElementById("results").innerHTML = html;
-```
-
+    document.getElementById("results").innerHTML = html;
 }
 
 function showUpcoming(matches) {
 
-```
-const nextMatches = matches.slice(0, 10);
+    const nextMatches = matches.slice(0, 10);
 
-let html = "";
+    let html = "";
 
-nextMatches.forEach(match => {
+    nextMatches.forEach(match => {
 
-    html += `
-        <div style="margin-bottom:8px;">
-            ${match.team1} vs ${match.team2}
-        </div>
-    `;
-});
+        html += `
+            <div style="margin-bottom:8px;">
+                ${match.team1} vs ${match.team2}
+            </div>
+        `;
+    });
 
-document.getElementById("nextMatches").innerHTML = html;
-```
-
+    document.getElementById("nextMatches").innerHTML = html;
 }
 
 function showCurrentMatch(matches) {
 
-```
-if (matches.length === 0) {
+    if (matches.length === 0) {
 
-    document.getElementById("currentMatch").innerHTML =
-        "Keine Spiele mehr offen";
+        document.getElementById("currentMatch").innerHTML =
+            "Keine Spiele mehr offen";
 
-    return;
-}
+        return;
+    }
 
-const match = matches[0];
+    const match = matches[0];
 
-document.getElementById("currentMatch").innerHTML = `
-    <div style="text-align:center;padding-top:20px;">
+    document.getElementById("currentMatch").innerHTML = `
+        <div style="text-align:center;padding-top:20px;">
 
-        <div style="
-            color:#ffd700;
-            font-size:20px;
-            margin-bottom:20px;
-            font-weight:bold;
-        ">
-            TOR ${match.gate}
+            <div style="
+                color:#ffd700;
+                font-size:20px;
+                margin-bottom:20px;
+                font-weight:bold;
+            ">
+                TOR ${match.gate}
+            </div>
+
+            <div style="
+                font-size:34px;
+                font-weight:bold;
+                margin-bottom:15px;
+            ">
+                ${match.team1}
+            </div>
+
+            <div style="
+                font-size:24px;
+                color:#ffd700;
+                margin-bottom:15px;
+            ">
+                VS
+            </div>
+
+            <div style="
+                font-size:34px;
+                font-weight:bold;
+                margin-bottom:20px;
+            ">
+                ${match.team2}
+            </div>
+
+            <div style="
+                font-size:20px;
+                color:#cccccc;
+            ">
+                ${match.group}
+            </div>
+
         </div>
-
-        <div style="
-            font-size:34px;
-            font-weight:bold;
-            margin-bottom:15px;
-        ">
-            ${match.team1}
-        </div>
-
-        <div style="
-            font-size:24px;
-            color:#ffd700;
-            margin-bottom:15px;
-        ">
-            VS
-        </div>
-
-        <div style="
-            font-size:34px;
-            font-weight:bold;
-            margin-bottom:20px;
-        ">
-            ${match.team2}
-        </div>
-
-        <div style="
-            font-size:20px;
-            color:#cccccc;
-        ">
-            ${match.group}
-        </div>
-
-    </div>
-`;
-```
-
+    `;
 }
 
 async function loadTables() {
 
-```
-try {
+    try {
 
-    const response = await fetch(TABLES_CSV);
-    const csv = await response.text();
+        const response = await fetch(TABLES_CSV);
+        const csv = await response.text();
 
-    showTable(csv);
+        showTable(csv);
 
-} catch (err) {
+    } catch (err) {
 
-    document.getElementById("liveTable").innerHTML =
-        "Tabelle konnte nicht geladen werden";
-}
-```
-
+        document.getElementById("liveTable").innerHTML =
+            "Tabelle konnte nicht geladen werden";
+    }
 }
 
 function showTable(csv) {
 
-```
-const groupName = GROUP_NAMES[currentGroup];
+    const groupName = GROUP_NAMES[currentGroup];
 
-const start = csv.indexOf(groupName);
+    const start = csv.indexOf(groupName);
 
-if (start === -1) return;
+    if (start === -1) return;
 
-let end = csv.length;
+    let end = csv.length;
 
-for (const name of GROUP_NAMES) {
+    for (const name of GROUP_NAMES) {
 
-    if (name === groupName) continue;
+        if (name === groupName) continue;
 
-    const pos = csv.indexOf(name, start + 1);
+        const pos = csv.indexOf(name, start + 1);
 
-    if (pos > start && pos < end) {
-        end = pos;
-    }
-}
-
-const section = csv.substring(start, end);
-const rows = section.split("\n");
-
-let html = `
-    <h2 style="color:#ffd700;margin-bottom:15px;">
-        ${groupName}
-    </h2>
-
-    <table>
-        <tr>
-            <th>#</th>
-            <th>Team</th>
-            <th>Pkt</th>
-            <th>Diff</th>
-        </tr>
-`;
-
-const teams = [];
-
-for (let i = 2; i < rows.length; i++) {
-
-    const cols = rows[i].split(",");
-
-    const team = cols[1];
-
-    if (!team) continue;
-    if (team.trim() === "") continue;
-    if (team === "Team") continue;
-
-    teams.push({
-        team: team,
-        points: Number(cols[9] || 0),
-        diff: Number(cols[8] || 0),
-        goals: Number(cols[6] || 0)
-    });
-}
-
-teams.sort((a, b) => {
-
-    if (b.points !== a.points)
-        return b.points - a.points;
-
-    if (b.diff !== a.diff)
-        return b.diff - a.diff;
-
-    return b.goals - a.goals;
-});
-
-teams.forEach((t, index) => {
-
-    let diffText = t.diff;
-
-    if (t.diff > 0) {
-        diffText = "+" + t.diff;
+        if (pos > start && pos < end) {
+            end = pos;
+        }
     }
 
-    html += `
-        <tr>
-            <td>${index + 1}</td>
-            <td>${t.team}</td>
-            <td>${t.points}</td>
-            <td>${diffText}</td>
-        </tr>
+    const section = csv.substring(start, end);
+    const rows = section.split("\n");
+
+    let html = `
+        <h2 style="color:#ffd700;margin-bottom:15px;">
+            ${groupName}
+        </h2>
+
+        <table>
+            <tr>
+                <th>#</th>
+                <th>Team</th>
+                <th>Pkt</th>
+                <th>Diff</th>
+            </tr>
     `;
-});
 
-html += "</table>";
+    const teams = [];
 
-document.getElementById("liveTable").innerHTML = html;
-```
+    for (let i = 2; i < rows.length; i++) {
 
+        const cols = rows[i].split(",");
+
+        const team = cols[1];
+
+        if (!team) continue;
+        if (team.trim() === "") continue;
+        if (team === "Team") continue;
+
+        teams.push({
+            team: team,
+            points: Number(cols[9] || 0),
+            diff: Number(cols[8] || 0),
+            goals: Number(cols[6] || 0)
+        });
+    }
+
+    teams.sort((a, b) => {
+
+        if (b.points !== a.points)
+            return b.points - a.points;
+
+        if (b.diff !== a.diff)
+            return b.diff - a.diff;
+
+        return b.goals - a.goals;
+    });
+
+    teams.forEach((t, index) => {
+
+        let diffText = t.diff;
+
+        if (t.diff > 0) {
+            diffText = "+" + t.diff;
+        }
+
+        html += `
+            <tr>
+                <td>${index + 1}</td>
+                <td>${t.team}</td>
+                <td>${t.points}</td>
+                <td>${diffText}</td>
+            </tr>
+        `;
+    });
+
+    html += "</table>";
+
+    document.getElementById("liveTable").innerHTML = html;
 }
 
 async function loadKO() {
 
-```
-try {
+    try {
 
-    const response = await fetch(KO_CSV);
-    const text = await response.text();
+        const response = await fetch(KO_CSV);
+        const text = await response.text();
 
-    document.getElementById("koRound").innerHTML =
-        "<pre style='white-space:pre-wrap'>" +
-        text.substring(0, 800) +
-        "</pre>";
+        document.getElementById("koRound").innerHTML =
+            "<pre style='white-space:pre-wrap'>" +
+            text.substring(0, 800) +
+            "</pre>";
 
-} catch (err) {
+    } catch (err) {
 
-    document.getElementById("koRound").innerHTML =
-        "KO-Daten konnten nicht geladen werden";
-}
-```
-
+        document.getElementById("koRound").innerHTML =
+            "KO-Daten konnten nicht geladen werden";
+    }
 }
 
 loadGroups();
@@ -342,17 +321,12 @@ loadKO();
 
 setInterval(() => {
 
-```
-currentGroup++;
+    currentGroup++;
 
-if (currentGroup >= GROUP_NAMES.length) {
-    currentGroup = 0;
-}
+    if (currentGroup >= GROUP_NAMES.length) {
+        currentGroup = 0;
+    }
 
-loadGroups();
-loadTables();
-loadKO();
-```
+    loadTables();
 
 }, 15000);
-
