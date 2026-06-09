@@ -135,17 +135,15 @@ function showUpcoming(matches) {
 function showCurrentSlot(matches) {
 
     if (matches.length === 0) {
-
         document.getElementById("currentMatch").innerHTML =
             "Keine Spiele mehr offen";
-
         return;
     }
 
-    const slotNumber = matches[0].slot;
+    const firstSlot = String(matches[0].slot).trim();
 
     const slotMatches = matches.filter(match =>
-        match.slot === slotNumber
+        String(match.slot).trim() === firstSlot
     );
 
     let html = `
@@ -156,7 +154,7 @@ function showCurrentSlot(matches) {
             font-weight:bold;
             margin-bottom:20px;
         ">
-            AKTUELLER SLOT ${slotNumber}
+            AKTUELLER SLOT ${firstSlot}
         </div>
     `;
 
@@ -164,22 +162,21 @@ function showCurrentSlot(matches) {
 
         html += `
             <div style="
-                margin-bottom:20px;
+                margin-bottom:15px;
                 padding-bottom:15px;
                 border-bottom:1px solid rgba(255,255,255,0.2);
             ">
 
                 <div style="
                     color:#ffd700;
-                    font-size:18px;
                     font-weight:bold;
-                    margin-bottom:8px;
+                    margin-bottom:5px;
                 ">
                     TOR ${match.gate}
                 </div>
 
                 <div style="
-                    font-size:24px;
+                    font-size:22px;
                     font-weight:bold;
                 ">
                     ${match.team1}
@@ -187,24 +184,16 @@ function showCurrentSlot(matches) {
 
                 <div style="
                     color:#ffd700;
-                    margin:6px 0;
-                    font-size:18px;
+                    margin:4px 0;
                 ">
                     VS
                 </div>
 
                 <div style="
-                    font-size:24px;
+                    font-size:22px;
                     font-weight:bold;
                 ">
                     ${match.team2}
-                </div>
-
-                <div style="
-                    color:#cccccc;
-                    margin-top:6px;
-                ">
-                    ${match.group}
                 </div>
 
             </div>
