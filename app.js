@@ -125,6 +125,67 @@ function showUpcoming(matches) {
 
     document.getElementById("nextMatches").innerHTML = html;
 }
+function showCurrentMatch(matches) {
+
+    if(matches.length === 0) {
+
+        document.getElementById("currentMatch").innerHTML =
+            "Keine Spiele mehr offen";
+
+        return;
+    }
+
+    const match = matches[0];
+
+    document.getElementById("currentMatch").innerHTML = `
+        <div style="
+            text-align:center;
+            padding-top:20px;
+        ">
+
+            <div style="
+                color:#ffd700;
+                font-size:18px;
+                margin-bottom:20px;
+            ">
+                JETZT AUF TOR 1
+            </div>
+
+            <div style="
+                font-size:34px;
+                font-weight:bold;
+                margin-bottom:15px;
+            ">
+                ${match.team1}
+            </div>
+
+            <div style="
+                font-size:24px;
+                color:#ffd700;
+                margin-bottom:15px;
+            ">
+                VS
+            </div>
+
+            <div style="
+                font-size:34px;
+                font-weight:bold;
+                margin-bottom:20px;
+            ">
+                ${match.team2}
+            </div>
+
+            <div style="
+                font-size:20px;
+                color:#cccccc;
+            ">
+                ${match.group}
+            </div>
+
+        </div>
+    `;
+}
+
 async function loadTables() {
 
     try {
