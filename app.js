@@ -66,7 +66,8 @@ async function loadGroups() {
                     group,
                     team1,
                     team2,
-                    time
+                    time,
+                    gate
                 });
             }
         });
