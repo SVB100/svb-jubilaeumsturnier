@@ -127,6 +127,8 @@ function showUpcoming(matches) {
 }
 function showCurrentMatch(matches) {
 
+    console.log(matches[0]);
+    
     if(matches.length === 0) {
 
         document.getElementById("currentMatch").innerHTML =
