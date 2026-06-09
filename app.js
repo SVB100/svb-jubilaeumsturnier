@@ -20,7 +20,14 @@ function parseCSV(text) {
         .split("\n")
         .map(row => row.split(","));
 }
+let currentGroup = 0;
 
+const GROUP_NAMES = [
+    "Gruppe A",
+    "Gruppe B",
+    "Gruppe C",
+    "Gruppe D"
+];
 async function loadGroups() {
 
     try {
@@ -116,7 +123,80 @@ function showUpcoming(matches) {
 
     document.getElementById("nextMatches").innerHTML = html;
 }
+async function loadTables() {
 
+    try {
+
+        const response = await fetch(TABLES_CSV);
+
+        const csv = await response.text();
+
+        showTable(csv);
+
+    } catch (err) {
+
+        document.getElementById("liveTable").innerHTML =
+            "Tabelle konnte nicht geladen werden";
+    }
+}
+
+function showTable(csv) {
+
+    const groupName = GROUP_NAMES[currentGroup];
+
+    const start = csv.indexOf(groupName);
+
+    if(start === -1) return;
+
+    const section =
+        csv.substring(start, start + 3000);
+
+    const rows = section.split("\n");
+
+    let html = `
+        <h2 style="color:#ffd700;margin-bottom:15px;">
+            ${groupName}
+        </h2>
+
+        <table>
+            <tr>
+                <th>#</th>
+                <th>Team</th>
+                <th>Pkt</th>
+            </tr>
+    `;
+
+    let position = 1;
+
+    for(let i = 2; i < rows.length; i++) {
+
+        const cols = rows[i].split(",");
+
+        const team = cols[1];
+        const points = cols[9];
+
+        if(!team) continue;
+
+        if(team.trim() === "") continue;
+
+        if(team === "Team") continue;
+
+        html += `
+            <tr>
+                <td>${position}</td>
+                <td>${team}</td>
+                <td>${points}</td>
+            </tr>
+        `;
+
+        position++;
+    }
+
+    html += "</table>";
+
+    document.getElementById("liveTable").innerHTML =
+        html;
+}
 async function loadKO() {
 
     try {
@@ -139,10 +219,18 @@ async function loadKO() {
 
 loadGroups();
 loadKO();
+loadTables();
 
 setInterval(() => {
 
+    currentGroup++;
+
+    if(currentGroup >= GROUP_NAMES.length) {
+        currentGroup = 0;
+    }
+
     loadGroups();
     loadKO();
+    loadTables();
 
 }, 15000);
