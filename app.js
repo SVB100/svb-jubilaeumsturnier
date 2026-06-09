@@ -171,11 +171,12 @@ const rows = section.split("\n");
         </h2>
 
         <table>
-            <tr>
-                <th>#</th>
-                <th>Team</th>
-                <th>Pkt</th>
-            </tr>
+    <tr>
+        <th>#</th>
+        <th>Team</th>
+        <th>Pkt</th>
+        <th>Diff</th>
+    </tr>
     `;
 
     const teams = [];
