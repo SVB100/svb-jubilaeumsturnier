@@ -131,84 +131,61 @@ function showUpcoming(matches) {
 
 function showCurrentMatch(matches) {
 
-    if (matches.length === 0) {
+    if(matches.length === 0) {
 
         document.getElementById("currentMatch").innerHTML =
             "Keine Spiele mehr offen";
 
         return;
     }
-    
-    const firstTime = (matches[0].time || "").trim();
 
-    const currentSlot = matches.filter(match =>
-        (match.time || "").trim() === firstTime
-    );
+    const match = matches[0];
 
-    let html = `
-        <div style="
-            text-align:center;
-            color:#ffd700;
-            font-size:24px;
-            font-weight:bold;
-            margin-bottom:20px;
-        ">
-            Aktueller Slot ${firstTime}
+    document.getElementById("currentMatch").innerHTML = `
+        <div style="text-align:center;padding-top:20px;">
+
+            <div style="
+                color:#ffd700;
+                font-size:20px;
+                margin-bottom:20px;
+                font-weight:bold;
+            ">
+                TOR ${match.gate}
+            </div>
+
+            <div style="
+                font-size:34px;
+                font-weight:bold;
+                margin-bottom:15px;
+            ">
+                ${match.team1}
+            </div>
+
+            <div style="
+                font-size:24px;
+                color:#ffd700;
+                margin-bottom:15px;
+            ">
+                VS
+            </div>
+
+            <div style="
+                font-size:34px;
+                font-weight:bold;
+                margin-bottom:20px;
+            ">
+                ${match.team2}
+            </div>
+
+            <div style="
+                font-size:20px;
+                color:#cccccc;
+            ">
+                ${match.group}
+            </div>
+
         </div>
     `;
-
-    currentSlot.forEach(match => {
-
-        html += `
-            <div style="
-                margin-bottom:20px;
-                padding-bottom:15px;
-                border-bottom:1px solid rgba(255,255,255,0.2);
-            ">
-
-                <div style="
-                    color:#ffd700;
-                    font-size:18px;
-                    font-weight:bold;
-                    margin-bottom:8px;
-                ">
-                    TOR ${match.gate}
-                </div>
-
-                <div style="
-                    font-size:22px;
-                    font-weight:bold;
-                ">
-                    ${match.team1}
-                </div>
-
-                <div style="
-                    color:#ffd700;
-                    margin:6px 0;
-                    font-size:18px;
-                ">
-                    VS
-                </div>
-
-                <div style="
-                    font-size:22px;
-                    font-weight:bold;
-                ">
-                    ${match.team2}
-                </div>
-
-                <div style="
-                    color:#cccccc;
-                    margin-top:8px;
-                ">
-                    ${match.group}
-                </div>
-
-            </div>
-        `;
-    });
-
-    document.getElementById("currentMatch").innerHTML = html;
 }
 
 function showTable(csv) {
