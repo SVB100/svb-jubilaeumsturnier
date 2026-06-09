@@ -139,6 +139,8 @@ function showCurrentMatch(matches) {
         return;
     }
 
+    console.log(matches.slice(0,10));
+    
     const firstTime = (matches[0].time || "").trim();
 
     const currentSlot = matches.filter(match =>
