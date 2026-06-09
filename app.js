@@ -178,31 +178,47 @@ const rows = section.split("\n");
             </tr>
     `;
 
-    let position = 1;
+    const teams = [];
 
-    for(let i = 2; i < rows.length; i++) {
+for(let i = 2; i < rows.length; i++) {
 
-        const cols = rows[i].split(",");
+    const cols = rows[i].split(",");
 
-        const team = cols[1];
-        const points = cols[9];
+    const team = cols[1];
 
-        if(!team) continue;
+    if(!team) continue;
+    if(team.trim() === "") continue;
+    if(team === "Team") continue;
 
-        if(team.trim() === "") continue;
+    teams.push({
+        team: team,
+        points: Number(cols[9] || 0),
+        diff: Number(cols[8] || 0),
+        goals: Number(cols[6] || 0)
+    });
+}
 
-        if(team === "Team") continue;
+teams.sort((a,b) => {
 
-        html += `
-            <tr>
-                <td>${position}</td>
-                <td>${team}</td>
-                <td>${points}</td>
-            </tr>
-        `;
+    if(b.points !== a.points)
+        return b.points - a.points;
 
-        position++;
-    }
+    if(b.diff !== a.diff)
+        return b.diff - a.diff;
+
+    return b.goals - a.goals;
+});
+
+teams.forEach((t,index) => {
+
+    html += `
+        <tr>
+            <td>${index + 1}</td>
+            <td>${t.team}</td>
+            <td>${t.points}</td>
+        </tr>
+    `;
+});
 
     html += "</table>";
 
