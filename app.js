@@ -116,34 +116,32 @@ function showResults(matches) {
 
 function showUpcoming(matches) {
 
-    const nextMatches = matches.slice(0, 10);
-
-    let html = "";
-
-    nextMatches.forEach(match => {
-
-        html += `
-            <div style="margin-bottom:8px;">
-                ${match.team1} vs ${match.team2}
-            </div>
-        `;
-    });
-
-    document.getElementById("nextMatches").innerHTML = html;
-}
-
-function showCurrentSlot(matches) {
-
     if (matches.length === 0) {
-        document.getElementById("currentMatch").innerHTML =
+
+        document.getElementById("nextMatches").innerHTML =
             "Keine Spiele mehr offen";
+
         return;
     }
 
-    const firstSlot = String(matches[0].slot).trim();
+    const currentSlot = String(matches[0].slot).trim();
+
+    const nextSlotMatch = matches.find(match =>
+        String(match.slot).trim() !== currentSlot
+    );
+
+    if (!nextSlotMatch) {
+
+        document.getElementById("nextMatches").innerHTML =
+            "Keine weiteren Slots";
+
+        return;
+    }
+
+    const nextSlot = String(nextSlotMatch.slot).trim();
 
     const slotMatches = matches.filter(match =>
-        String(match.slot).trim() === firstSlot
+        String(match.slot).trim() === nextSlot
     );
 
     let html = `
@@ -154,7 +152,7 @@ function showCurrentSlot(matches) {
             font-weight:bold;
             margin-bottom:20px;
         ">
-            AKTUELLER SLOT ${firstSlot}
+            NÄCHSTER SLOT ${nextSlot}
         </div>
     `;
 
@@ -176,7 +174,7 @@ function showCurrentSlot(matches) {
                 </div>
 
                 <div style="
-                    font-size:22px;
+                    font-size:20px;
                     font-weight:bold;
                 ">
                     ${match.team1}
@@ -190,7 +188,7 @@ function showCurrentSlot(matches) {
                 </div>
 
                 <div style="
-                    font-size:22px;
+                    font-size:20px;
                     font-weight:bold;
                 ">
                     ${match.team2}
@@ -200,7 +198,7 @@ function showCurrentSlot(matches) {
         `;
     });
 
-    document.getElementById("currentMatch").innerHTML = html;
+    document.getElementById("nextMatches").innerHTML = html;
 }
 
 async function loadTables() {
