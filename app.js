@@ -1,11 +1,11 @@
 const GROUPS_CSV =
-"https://docs.google.com/spreadsheets/d/e/2PACX-1vTsivD74M4OG5UOHhOQUX5Q8vvYKVpFF2i4A4Y8gdt2wwWR-OxOYZKyF0qqdZxxg1YPKK5g7IBs-gHJ/pub?gid=1851533996&single=true&output=csv";
+"https://docs.google.com/spreadsheets/d/e/2PACX-1vQrzWNiUjfIIyZAv9FzuXUf5MMZnwKMqN3FdGixf5Li5wSaUIA5NU-0pXMGNi2TKg/pub?gid=1790291209&single=true&output=csv";
 
 const TABLES_CSV =
-"https://docs.google.com/spreadsheets/d/e/2PACX-1vTsivD74M4OG5UOHhOQUX5Q8vvYKVpFF2i4A4Y8gdt2wwWR-OxOYZKyF0qqdZxxg1YPKK5g7IBs-gHJ/pub?gid=447541581&single=true&output=csv";
+"https://docs.google.com/spreadsheets/d/e/2PACX-1vQrzWNiUjfIIyZAv9FzuXUf5MMZnwKMqN3FdGixf5Li5wSaUIA5NU-0pXMGNi2TKg/pub?gid=1989085490&single=true&output=csv";
 
 const KO_CSV =
-"https://docs.google.com/spreadsheets/d/e/2PACX-1vTsivD74M4OG5UOHhOQUX5Q8vvYKVpFF2i4A4Y8gdt2wwWR-OxOYZKyF0qqdZxxg1YPKK5g7IBs-gHJ/pub?gid=1400585892&single=true&output=csv";
+"https://docs.google.com/spreadsheets/d/e/2PACX-1vQrzWNiUjfIIyZAv9FzuXUf5MMZnwKMqN3FdGixf5Li5wSaUIA5NU-0pXMGNi2TKg/pub?gid=1216619965&single=true&output=csv";
 
 function updateClock() {
     document.getElementById("clock").innerHTML =
