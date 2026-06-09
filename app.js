@@ -145,53 +145,69 @@ function showCurrentMatch(matches) {
         m => m.time === firstTime
     );
 
-    document.getElementById("currentMatch").innerHTML = `
+    let html = `
+    <div style="
+        text-align:center;
+        margin-bottom:20px;
+        color:#ffd700;
+        font-size:22px;
+        font-weight:bold;
+    ">
+        Aktueller Slot ${firstTime}
+    </div>
+`;
+
+currentSlot.forEach(match => {
+
+    html += `
         <div style="
-            text-align:center;
-            padding-top:20px;
+            margin-bottom:25px;
+            border-bottom:1px solid rgba(255,255,255,0.2);
+            padding-bottom:15px;
         ">
 
             <div style="
                 color:#ffd700;
                 font-size:18px;
-                margin-bottom:20px;
+                margin-bottom:8px;
             ">
-                JETZT AUF TOR ${match.gate}
+                TOR ${match.gate}
             </div>
 
             <div style="
-                font-size:34px;
+                font-size:26px;
                 font-weight:bold;
-                margin-bottom:15px;
             ">
                 ${match.team1}
             </div>
 
             <div style="
-                font-size:24px;
+                font-size:18px;
                 color:#ffd700;
-                margin-bottom:15px;
+                margin:6px 0;
             ">
                 VS
             </div>
 
             <div style="
-                font-size:34px;
+                font-size:26px;
                 font-weight:bold;
-                margin-bottom:20px;
             ">
                 ${match.team2}
             </div>
 
             <div style="
-                font-size:20px;
                 color:#cccccc;
+                margin-top:6px;
             ">
                 ${match.group}
             </div>
 
         </div>
     `;
+});
+
+document.getElementById("currentMatch").innerHTML = html;
 }
 
 async function loadTables() {
