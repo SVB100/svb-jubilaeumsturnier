@@ -139,11 +139,11 @@ function showCurrentMatch(matches) {
         return;
     }
 
-    const firstTime = matches[0].time;
+    const firstGate = matches[0].gate;
 
-    const currentSlot = matches.filter(
-        m => m.time === firstTime
-    );
+const currentSlot = matches.filter(
+    m => m.gate === firstGate
+);
 
     let html = `
     <div style="
