@@ -77,7 +77,12 @@ async function loadGroups() {
             }
         });
 
-        showResults(played);
+        const allResults = [
+    ...played,
+    ...(window.koResults || [])
+];
+
+        showResults(allResults);
         showCurrentSlot(upcoming);
         showUpcoming(upcoming);
 
