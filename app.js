@@ -77,10 +77,11 @@ async function loadGroups() {
             }
         });
 
+        // Gruppenspiele + KO-Spiele zusammenführen
         const allResults = [
-    ...played,
-    ...(window.koResults || [])
-];
+            ...played,
+            ...(window.koResults || [])
+        ];
 
         showResults(allResults);
         showCurrentSlot(upcoming);
