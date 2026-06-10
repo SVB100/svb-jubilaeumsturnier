@@ -99,7 +99,7 @@ async function loadGroups() {
 function showResults(matches) {
 
     const lastMatches =
-        matches.slice(-10).reverse();
+        matches.slice(-15).reverse();
 
     let html = "";
 
