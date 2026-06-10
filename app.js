@@ -479,11 +479,13 @@ async function loadKO() {
                     </div>
 
                     <div style="
-                        color:#ffd700;
-                        margin:5px 0;
-                    ">
-                        VS
-                    </div>
+    color:#ffd700;
+    margin:5px 0;
+    font-size:20px;
+    font-weight:bold;
+">
+    ${result || "VS"}
+</div>
 
                     <div style="
                         font-size:18px;
