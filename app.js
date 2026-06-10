@@ -424,6 +424,18 @@ async function loadKO() {
             const team1 = row[5]?.trim();
             const team2 = row[6]?.trim();
             const result = row[7]?.trim();
+            
+            if (result && team1 && team2) {
+
+    window.koResults = window.koResults || [];
+
+    window.koResults.push({
+        team1,
+        team2,
+        result,
+        group: round
+    });
+}
 
             if (
                 !round ||
