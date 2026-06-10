@@ -403,7 +403,11 @@ function showTable(csv) {
 
 async function loadKO() {
 
+    async function loadKO() {
+
     try {
+
+        window.koResults = [];
 
         const response = await fetch(KO_CSV);
         const csv = await response.text();
