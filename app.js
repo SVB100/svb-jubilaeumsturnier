@@ -546,7 +546,7 @@ async function loadKO() {
     }
 }
 
-    loadGroups();
+loadGroups();
 loadTables();
 loadKO();
 
