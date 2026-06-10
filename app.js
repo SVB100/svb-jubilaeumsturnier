@@ -423,6 +423,7 @@ async function loadKO() {
             const gate = row[4]?.trim();
             const team1 = row[5]?.trim();
             const team2 = row[6]?.trim();
+            const result = row[7]?.trim();
 
             if (
                 !round ||
