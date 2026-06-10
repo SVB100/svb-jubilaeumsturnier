@@ -426,18 +426,16 @@ async function loadKO() {
             const team1 = row[5]?.trim();
             const team2 = row[6]?.trim();
             const result = row[7]?.trim();
-            
+
             if (result && team1 && team2) {
 
-    window.koResults = window.koResults || [];
-
-    window.koResults.push({
-        team1,
-        team2,
-        result,
-        group: round
-    });
-}
+                window.koResults.push({
+                    team1: team1,
+                    team2: team2,
+                    result: result,
+                    group: round
+                });
+            }
 
             if (
                 !round ||
@@ -493,13 +491,13 @@ async function loadKO() {
                     </div>
 
                     <div style="
-    color:#ffd700;
-    margin:5px 0;
-    font-size:20px;
-    font-weight:bold;
-">
-    ${result || "VS"}
-</div>
+                        color:#ffd700;
+                        margin:5px 0;
+                        font-size:20px;
+                        font-weight:bold;
+                    ">
+                        ${result || "VS"}
+                    </div>
 
                     <div style="
                         font-size:18px;
@@ -523,18 +521,6 @@ async function loadKO() {
             "KO-Daten konnten nicht geladen werden";
     }
 }
-
-loadGroups();
-loadTables();
-loadKO();
-
-setInterval(() => {
-
-    currentGroup++;
-
-    if (currentGroup >= GROUP_NAMES.length) {
-        currentGroup = 0;
-    }
 
     loadGroups();
     loadTables();
