@@ -104,15 +104,34 @@ async function loadGroups() {
 
 function showResults(matches) {
 
-    const lastMatches =
-        matches.slice(-15).reverse();
+    const koMatches = matches.filter(match =>
+        match.group &&
+        !match.group.startsWith("Gruppe")
+    );
+
+    const groupMatches = matches.filter(match =>
+        !match.group ||
+        match.group.startsWith("Gruppe")
+    );
+
+    const lastMatches = [
+        ...koMatches.reverse(),
+        ...groupMatches.reverse()
+    ].slice(0, 15);
 
     let html = "";
 
     lastMatches.forEach(match => {
 
+        const label =
+            match.group &&
+            !match.group.startsWith("Gruppe")
+                ? `🏆 ${match.group}: `
+                : "";
+
         html += `
             <div style="margin-bottom:8px;">
+                ${label}
                 <strong>${match.team1}</strong>
                 ${match.result}
                 <strong>${match.team2}</strong>
@@ -123,7 +142,6 @@ function showResults(matches) {
     document.getElementById("results").innerHTML =
         html;
 }
-
 function showCurrentSlot(matches) {
 
     if (matches.length === 0) {
