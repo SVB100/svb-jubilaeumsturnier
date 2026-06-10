@@ -529,6 +529,18 @@ async function loadKO() {
 }
 
     loadGroups();
+loadTables();
+loadKO();
+
+setInterval(() => {
+
+    currentGroup++;
+
+    if (currentGroup >= GROUP_NAMES.length) {
+        currentGroup = 0;
+    }
+
+    loadGroups();
     loadTables();
     loadKO();
 
