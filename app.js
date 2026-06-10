@@ -403,8 +403,6 @@ function showTable(csv) {
 
 async function loadKO() {
 
-    async function loadKO() {
-
     try {
 
         window.koResults = [];
